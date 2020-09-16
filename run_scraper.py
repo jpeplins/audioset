@@ -55,13 +55,14 @@ def dispatch_workers(num_workers=20):
             w.start()
 
         except Exception as e:
-            print("Could not start worker for file %s." % worker_csv_fn)
+            pass
+            # print("Could not start worker for file %s." % worker_csv_fn)
 
     for w in workers:
         try:
             w.join()
         except Exception as e:
-            print('Everything is broken. Just give up.')
+            # print('Everything is broken. Just give up.')
             exit()
 
 
@@ -74,13 +75,14 @@ def worker(csv_fn):
 
         command = "cat ./tmp/%s | ./download.sh" % csv_fn
         ps = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        output = ps.communicate()[0]
-        print('worker %s says: %s' % (csv_fn, output))
-        sys.stdout.flush()
+        # output = ps.communicate()[0]
+        # print('worker %s says: %s' % (csv_fn, output))
+        # sys.stdout.flush()
 
     except Exception as e:
-        print('worker had an oopsie on file %s' % csv_fn)
-        print(traceback.format_exc())
+        # print('worker had an oopsie on file %s' % csv_fn)
+        # print(traceback.format_exc())
+        pass
     return
 
 
