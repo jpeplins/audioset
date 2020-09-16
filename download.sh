@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SAMPLE_RATE=16000
-OUT_DIR="/Data3/audioset-speech/files"
+OUT_DIR="/data3/audioset-speech/files"
 
 # fetch_clip(videoID, startTime, endTime)
 fetch_clip() {

@@ -3,7 +3,6 @@ import traceback
 import csv
 import os
 
-OUT_DIR = "/data3/audioset-speech/files/"
 TMP_DIR = "./tmp"
 SEG_FN = "./segments/speech_segments.csv"
 
@@ -73,4 +72,5 @@ def worker(csv_fn):
 
 
 if __name__ == "__main__":
-    dispatch_workers()
+    make_temp_segment_files(20)
+    dispatch_workers(20)
