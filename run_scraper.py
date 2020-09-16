@@ -73,4 +73,4 @@ def worker(csv_fn):
 
 
 if __name__ == "__main__":
-    make_temp_segment_files(20)
+    dispatch_workers(20)
