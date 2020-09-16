@@ -7,8 +7,8 @@ OUT_DIR="/data2/audioset-speech/files"
 fetch_clip() {
   echo "Fetching $1 ($2 to $3)..."
   outname="$1_$2"
-  if [ -f "${outname}.wav.gz" ]; then
-    echo "Already have it."
+  if [ -f "${OUT_DIR}/${outname}.wav" ]; then
+    echo "Already have ${outname}."
     return
   fi
 

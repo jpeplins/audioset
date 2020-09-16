@@ -1,4 +1,5 @@
 import multiprocessing as mp
+import subprocess
 import traceback
 import csv
 import os
@@ -64,7 +65,7 @@ def worker(csv_fn):
     """ Pipe a CSV into a bash script which uses youtube-dl. """
     try:
         command = "cat ./tmp/%s | ./download.sh" % csv_fn
-        os.system(command)
+        subprocess.call(command)
     except Exception as e:
         print('worker had an oopsie on file %s' % csv_fn)
         print(traceback.format_exc())
@@ -73,4 +74,3 @@ def worker(csv_fn):
 
 if __name__ == "__main__":
     make_temp_segment_files(20)
-    dispatch_workers(20)
