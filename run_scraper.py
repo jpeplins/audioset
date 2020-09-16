@@ -63,6 +63,7 @@ def dispatch_workers(num_workers=20):
             print('Everything is broken. Just give up.')
             exit()
 
+
 def worker(csv_fn):
     """ Pipe a CSV into a bash script which uses youtube-dl. """
     try:
@@ -73,6 +74,7 @@ def worker(csv_fn):
         command = "cat ./tmp/%s | ./download.sh" % csv_fn
         ps = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         output = ps.communicate()[0]
+        print('worker %s says: %s' % (csv_fn, output))
 
     except Exception as e:
         print('worker had an oopsie on file %s' % csv_fn)
