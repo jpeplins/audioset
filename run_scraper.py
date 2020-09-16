@@ -64,7 +64,7 @@ def dispatch_workers(num_workers=20):
 def worker(csv_fn):
     """ Pipe a CSV into a bash script which uses youtube-dl. """
     try:
-        subprocess.run(["cat", "./tmp/"+csv_fn, "|", "./download.sh"])
+        subprocess.run(["cat", "./tmp/"+csv_fn, "|", "./download.sh"], shell=True)
     except Exception as e:
         print('worker had an oopsie on file %s' % csv_fn)
         print(traceback.format_exc())
