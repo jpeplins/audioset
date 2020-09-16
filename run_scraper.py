@@ -1,6 +1,7 @@
 import multiprocessing as mp
 import subprocess
 import traceback
+import sys
 import csv
 import os
 
@@ -75,6 +76,7 @@ def worker(csv_fn):
         ps = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         output = ps.communicate()[0]
         print('worker %s says: %s' % (csv_fn, output))
+        sys.stdout.flush()
 
     except Exception as e:
         print('worker had an oopsie on file %s' % csv_fn)
