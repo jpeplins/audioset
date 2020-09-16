@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SAMPLE_RATE=16000
-OUT_DIR="/data3/audioset-speech/files"
+OUT_DIR="/data2/audioset-speech/files"
 
 # fetch_clip(videoID, startTime, endTime)
 fetch_clip() {
@@ -20,6 +20,7 @@ fetch_clip() {
     # character from stdin. I have no idea why.
     yes | ffmpeg -loglevel quiet -i "./$outname.wav" -ac 1 -ar $SAMPLE_RATE \
       -ss "$2" -to "$3" "${OUT_DIR}/${outname}.wav"
+    rm "./$outname.wav"
   else
     echo "Issue downloading file ${outname}.wav"
   fi
