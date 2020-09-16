@@ -1,18 +1,34 @@
 import multiprocessing as mp
 import subprocess
-import traceback
-import sys
 import csv
 import os
 
+OUT_DIR = "/data2/audioset-speech/files"
 TMP_DIR = "./tmp"
 SEG_FN = "./segments/speech_segments.csv"
+REM_SEG_FN = "./segments/remaining.csv"
+
+
+def make_remainder_segments_file():
+    """ Reads OUT_DIR and SEG_FN and creates new CSV with files left to download. """
+
+    downloaded = os.listdir(OUT_DIR)
+
+    with open(SEG_FN, 'r') as f:
+        reader = csv.reader(f)
+        with open(REM_SEG_FN, 'w+') as w:
+            writer = csv.writer(w)
+            for row in reader:
+                if any([row[0] in fn for fn in downloaded]):
+                    continue
+                writer.writerow(row)
+    return
 
 
 def make_temp_segment_files(num_workers):
     """ Reads segments CSV and partitions into multiple CSVs, one for each worker. """
 
-    with open(SEG_FN, 'r') as f:
+    with open(REM_SEG_FN, 'r') as f:
         reader = csv.reader(f)
         num_entries = sum(1 for _ in reader)
         entries_per_worker = num_entries // num_workers
@@ -42,7 +58,6 @@ def make_temp_segment_files(num_workers):
 def dispatch_workers(num_workers=20):
     """ Function to do stuff"""
     workers = []
-    pool = mp.Pool(num_workers)
 
     # check if we need to make CSVs for each worker
     if not bool(os.listdir(TMP_DIR)):
@@ -56,35 +71,25 @@ def dispatch_workers(num_workers=20):
 
         except Exception as e:
             pass
-            # print("Could not start worker for file %s." % worker_csv_fn)
 
     for w in workers:
         try:
             w.join()
         except Exception as e:
-            # print('Everything is broken. Just give up.')
             exit()
 
 
 def worker(csv_fn):
     """ Pipe a CSV into a bash script which uses youtube-dl. """
     try:
-        # subprocess.run(["cat", "./tmp/"+csv_fn, "|", "./download.sh"], shell=True)
-        # csv_process = subprocess.Popen(("cat", "./tmp/"+csv_fn), stdout=subprocess.PIPE)
-        # output = subprocess.check_output(("./download.sh",), stdin=csv_process.stdout)
-
         command = "cat ./tmp/%s | ./download.sh" % csv_fn
         ps = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        # output = ps.communicate()[0]
-        # print('worker %s says: %s' % (csv_fn, output))
-        # sys.stdout.flush()
+        output = ps.communicate()[0]
 
     except Exception as e:
-        # print('worker had an oopsie on file %s' % csv_fn)
-        # print(traceback.format_exc())
         pass
     return
 
 
 if __name__ == "__main__":
-    dispatch_workers(20)
+    dispatch_workers(25)
