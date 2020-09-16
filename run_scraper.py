@@ -65,6 +65,9 @@ def worker(csv_fn):
     """ Pipe a CSV into a bash script which uses youtube-dl. """
     try:
         subprocess.run(["cat", "./tmp/"+csv_fn, "|", "./download.sh"], shell=True)
+        csv_process = subprocess.Popen(("cat", "./tmp/"+csv_fn), stdout=subprocess.PIPE)
+        output = subprocess.check_output(("./download.sh",), stdin=csv_process.stdout)
+        csv_process.wait()
     except Exception as e:
         print('worker had an oopsie on file %s' % csv_fn)
         print(traceback.format_exc())
