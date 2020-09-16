@@ -1,0 +1,5 @@
+files/
+tmp/
+venv/
+segments/.DS_Store
+.DS_Store

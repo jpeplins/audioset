@@ -1,12 +1,27 @@
-# audioset
+# Audioset Scraper
 
-This is a set of tools for downloading and using [AudioSet](https://research.google.com/audioset/), a dataset of labeled audio files.
+This is a tool for downloading raw audio from [AudioSet](https://research.google.com/audioset/), a dataset of labeled audio files. This tool only works in Unix-like environments, sorry.
 
-# What's included
+This version is modified by [Jacob Peplinski](https://github.com/jpeplins) to support
+* Multiprocessing!
+* Label Filtering!
+* Commercial Flight Simulation! (TBD)
 
- * **this directory** - Go package for using AudioSet.
- * [class_split](class_split) - partition the classes for meta-learning.
- * [download](download) - download raw WAV files.
- * [find_bad](find_bad) - find corrupted WAV files from a download.
- * [metaset](metaset) - Go package for meta-learning with AudioSet.
- * [pcm_stats](pcm_stats) - compute waveform statistics from WAV files.
+The original can be found [here](https://github.com/unixpickle/audioset).
+ 
+# Dependencies
+
+ * bash
+ * ffmpeg
+ * youtube-dl
+ * gzip
+
+# Usage
+After adjusting the `OUT_DIR` variable in `download.sh` to your liking, open a terminal and do the following:
+
+```
+virtualenv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+python3 run_scraper.py
+```
