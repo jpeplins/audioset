@@ -13,7 +13,7 @@ fetch_clip() {
   fi
 
   youtube-dl https://youtube.com/watch?v=$1 \
-    --quiet --extract-audio --audio-format wav \
+    --quiet --force-ipv4 --extract-audio --audio-format wav \
     --output "$outname.%(ext)s"
   if [ $? -eq 0 ]; then
     # If we don't pipe `yes`, ffmpeg seems to steal a

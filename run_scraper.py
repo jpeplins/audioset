@@ -40,7 +40,7 @@ def make_temp_segment_files(num_workers):
 
 def dispatch_workers(num_workers=20):
     """ Function to do stuff"""
-
+    workers = []
     pool = mp.Pool(num_workers)
 
     # check if we need to make CSVs for each worker
@@ -49,17 +49,19 @@ def dispatch_workers(num_workers=20):
 
     for worker_csv_fn in os.listdir('./tmp/'):
         try:
-            pool.apply_async(worker, [worker_csv_fn])
+            w = mp.Process(target=worker, args=(worker_csv_fn,))
+            workers.append(w)
+            w.start()
+
         except Exception as e:
             print("Could not start worker for file %s." % worker_csv_fn)
-        finally:
-            try:
-                pool.close()
-                pool.join()
-            except Exception as e:
-                print('Everything is broken. Just give up.')
-                exit()
 
+    for w in workers:
+        try:
+            w.join()
+        except Exception as e:
+            print('Everything is broken. Just give up.')
+            exit()
 
 def worker(csv_fn):
     """ Pipe a CSV into a bash script which uses youtube-dl. """
